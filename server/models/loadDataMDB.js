@@ -17,10 +17,13 @@ const neighbsArray = [
 var totalAdded = 0;
 var counter = 0
 
+var BATCH_SIZE = 10000;
+var NUM_CYCLES = 1000;
+
 function generateDummyArray(i) {
   return new Promise((resolve, reject) => {
     var scaleListingsArray = [];
-    for (var j = 0; j < 10000; j++) {
+    for (var j = 0; j < BATCH_SIZE; j++) {
       counter++;
       var listing = new Listing({
         "id": counter,
@@ -56,7 +59,7 @@ const insertAsyncListing = (callback) => {
           reject(console.log('ERROR @ insertMany:', err));
         } else {
           console.log('RAM usage:', process.memoryUsage().heapUsed/1000000, 'MBs');
-          totalAdded += 10000;
+          totalAdded += BATCH_SIZE;
           console.log('Current total records:', totalAdded);
           resolve();
         }
@@ -67,7 +70,7 @@ const insertAsyncListing = (callback) => {
   async function initialize() {
     console.log('****** Begin Data Injection ******')
     var begin = Date.now();
-    for (var i = 0; i < 1000; i++) {
+    for (var i = 0; i < NUM_CYCLES; i++) {
       var listingArray = await generateDummyArray(i)
       await insertRecs(listingArray);
     }

@@ -14,6 +14,8 @@ const landmarks = generatedLandmarks.landmarksData;
 // ====================================================================
 
 var totalAdded = 0;
+var BATCH_SIZE = 10000;
+var NUM_CYCLES = 1000;
 
 const insertAsync = (callback) => {
     
@@ -22,7 +24,7 @@ const insertAsync = (callback) => {
       Listing.bulkCreate(array)
         .then(() => {
           console.log('RAM usage:', process.memoryUsage().heapUsed/1000000, 'MBs');
-          totalAdded += 10000;
+          totalAdded += BATCH_SIZE;
           console.log('Current total records:', totalAdded);
           resolve();
         })
@@ -35,8 +37,8 @@ const insertAsync = (callback) => {
   async function initialize() {
     console.log('****** Begin Data Injection ******')
     var begin = Date.now();
-    for (let i = 0; i < 1000; i++) {
-      var listingArray = await generateDummyArray()
+    for (let i = 0; i < NUM_CYCLES; i++) {
+      var listingArray = await generateDummyArray(BATCH_SIZE)
       await insert(listingArray);
     }
     var end = Date.now();
