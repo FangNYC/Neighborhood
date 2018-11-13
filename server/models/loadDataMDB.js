@@ -1,23 +1,23 @@
 const async = require('async');
-const generatedLandmarks = require('./dummyData/generateLandmarksData.js');
 const { db } = require('./../../database/mongoDB/index.js');
 const { Listing } = require('./../../database/mongoDB/index.js');
-const { Neighborhood } = require('./../../database/mongoDB/index.js');
 const { Landmark } = require('./../../database/mongoDB/index.js');
+const landmarks = generatedLandmarks.landmarksData;
 const faker = require('faker');
 
-var neighbsArray = [
+const neighbsArray = [
   'Hackney', 'Camden Town', 'Marylebone', 'Greenwich', 'Hackney', 'Brixton', 'Islington', 'Soho', 'Paddington', 'Chelsea', 'Kensington', 'Mayfair'
 ]
 
 var totalAdded = 0;
+var counter = 0
 
 function generateDummyArray(i) {
   return new Promise((resolve, reject) => {
     var scaleListingsArray = [];
     for (var j = 0; j < 10000; j++) {
       var listing = new Listing({
-        "listingId": Math.floor(Math.random() * 10) * j,
+        "listingId": idGen(),
         "hostFirstName": faker.name.firstName(),
         "city": 'London',
         "region": 'England',
@@ -41,7 +41,7 @@ function generateDummyArray(i) {
   })
 }
 
-function insertAsyncListing(callback) {
+const insertAsyncListing = (callback) => {
     
   function insertRecs(array) {
     return new Promise((resolve, reject) => {
@@ -61,7 +61,7 @@ function insertAsyncListing(callback) {
   async function initialize() {
     console.log('****** Begin Data Injection ******')
     var begin = Date.now();
-    for (var i = 0; i < 1000; i++) {
+    for (var i = 0; i < 100; i++) {
       var listingArray = await generateDummyArray(i)
       await insertRecs(listingArray);
     }
@@ -72,10 +72,17 @@ function insertAsyncListing(callback) {
   initialize(); 
 }
 
+const idGen = () => {
+  counter++;
+  return counter;
+}
+
 insertAsyncListing((time) => {
   console.log('Listing table populated with ' + totalAdded + ' records in ' + time + ' minutes');
   console.log('****** End Data Injection ******');
 });
 
-// // Insert Landmarks
-// Landmark.collection.insert(generatedLandmarks)
+// Insert Landmarks
+landmarks.then((results) => {
+  Landmark.collection.insert(results)
+})
