@@ -2,6 +2,7 @@ const async = require('async');
 const { db } = require('./../../database/mongoDB/index.js');
 const { Listing } = require('./../../database/mongoDB/index.js');
 const { Landmark } = require('./../../database/mongoDB/index.js');
+const generatedLandmarks = require('./dummyData/generateLandmarksData.js');
 const landmarks = generatedLandmarks.landmarksData;
 const faker = require('faker');
 
@@ -15,9 +16,10 @@ var counter = 0
 function generateDummyArray(i) {
   return new Promise((resolve, reject) => {
     var scaleListingsArray = [];
-    for (var j = 0; j < 10000; j++) {
+    for (var j = 0; j < 10; j++) {
+      counter++;
       var listing = new Listing({
-        "listingId": idGen(),
+        "id": counter,
         "hostFirstName": faker.name.firstName(),
         "city": 'London',
         "region": 'England',
@@ -27,13 +29,13 @@ function generateDummyArray(i) {
         "listingLong": Number((Math.random() * 100).toFixed(6)),
         "neighbDesc": faker.lorem.paragraph(),
         "gettingAroundDesc": faker.lorem.paragraph(),
-        "feature1": faker.lorem.sentence(),
-        "feature2": faker.lorem.sentence(),
-        "feature3": faker.lorem.sentence(),
-        "feature4": faker.lorem.sentence(),
-        "feature5": faker.lorem.sentence(),
-        "feature6": faker.lorem.sentence(),
-        "feature7": faker.lorem.sentence()
+        "feature1": faker.lorem.words(),
+        "feature2": faker.lorem.words(),
+        "feature3": faker.lorem.words(),
+        "feature4": faker.lorem.words(),
+        "feature5": faker.lorem.words(),
+        "feature6": faker.lorem.words(),
+        "feature7": faker.lorem.words()
       })
       scaleListingsArray.push(listing)
     }
@@ -50,7 +52,7 @@ const insertAsyncListing = (callback) => {
           reject(console.log('ERROR @ insertMany:', err));
         } else {
           console.log('RAM usage:', process.memoryUsage().heapUsed/1000000, 'MBs');
-          totalAdded += 10000;
+          totalAdded += 10;
           console.log('Current total records:', totalAdded);
           resolve();
         }
@@ -61,7 +63,7 @@ const insertAsyncListing = (callback) => {
   async function initialize() {
     console.log('****** Begin Data Injection ******')
     var begin = Date.now();
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 2; i++) {
       var listingArray = await generateDummyArray(i)
       await insertRecs(listingArray);
     }
@@ -70,11 +72,6 @@ const insertAsyncListing = (callback) => {
     callback(timeSpent);
   }
   initialize(); 
-}
-
-const idGen = () => {
-  counter++;
-  return counter;
 }
 
 insertAsyncListing((time) => {

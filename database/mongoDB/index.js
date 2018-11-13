@@ -1,6 +1,9 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const autoinc = require('mongoose-sequence')(mongoose);
+
 mongoose.connect('mongodb://localhost/neighborhood');
 mongoose.set('useCreateIndex', true);
+
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -10,7 +13,7 @@ db.once('open', function() {
 
 // Define schemas + models:
 var listingsSchema = new mongoose.Schema({
-  listingId: {type: Number, required: true},
+  id: Number,
   hostFirstName: String,
   city: String,
   region: String,
@@ -28,7 +31,11 @@ var listingsSchema = new mongoose.Schema({
   feature6: String,
   feature7: String
 });
+listingsSchema.plugin(autoinc, {inc_field: 'id', start: 1000000});
+
 var Listing = mongoose.model('Listing', listingsSchema);
+
+// db.counters.insert({})
 
 // db.createCollection('counters');
 // db.counters.insert({_id: 'productid', sequence_value: 0});
