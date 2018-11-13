@@ -9,6 +9,10 @@ const Neighborhood = models.neighborhoodSchema;
 const Landmark = models.landmarkSchema;
 const landmarks = generatedLandmarks.landmarksData;
 
+// ====================================================================
+// This script generates 10M listings records and injects into Postgres
+// ====================================================================
+
 var totalAdded = 0;
 
 const insertAsync = (callback) => {

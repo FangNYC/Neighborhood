@@ -6,6 +6,10 @@ const generatedLandmarks = require('./dummyData/generateLandmarksData.js');
 const landmarks = generatedLandmarks.landmarksData;
 const faker = require('faker');
 
+// ===================================================================
+// This script generates 10M listings records and injects into MongoDB
+// ===================================================================
+
 const neighbsArray = [
   'Hackney', 'Camden Town', 'Marylebone', 'Greenwich', 'Hackney', 'Brixton', 'Islington', 'Soho', 'Paddington', 'Chelsea', 'Kensington', 'Mayfair'
 ]
