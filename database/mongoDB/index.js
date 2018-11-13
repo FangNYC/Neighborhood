@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
 const autoinc = require('mongoose-sequence')(mongoose);
 
+////////// Set up Mongoose connection //////////
 mongoose.connect('mongodb://localhost/neighborhood');
 mongoose.set('useCreateIndex', true);
-
-
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('MongoDB connection has been established successfully')
 });
 
-// Define schemas + models:
+////////// Define schemas + models //////////
 var listingsSchema = new mongoose.Schema({
   id: Number,
   hostFirstName: String,
@@ -32,22 +31,11 @@ var listingsSchema = new mongoose.Schema({
   feature7: String
 });
 listingsSchema.plugin(autoinc, {inc_field: 'id', start: 1000000});
-
 var Listing = mongoose.model('Listing', listingsSchema);
 
 // db.counters.insert({})
-
 // db.createCollection('counters');
 // db.counters.insert({_id: 'productid', sequence_value: 0});
-
-// function getNextSequenceValue(sequenceName){
-//   var sequenceDocument = db.counters.findAndModify({
-//   query:{_id: sequenceName },
-//   update: {$inc:{sequence_value:1}},
-//   new:true
-//     });
-// return sequenceDocument.sequence_value;
-// }
 
 var landmarksSchema = new mongoose.Schema({
   id: Number,
@@ -58,9 +46,21 @@ var landmarksSchema = new mongoose.Schema({
 })
 var Landmark = mongoose.model('Landmark', landmarksSchema)
 
+////////// Database Methods //////////
+
+const getListingData = (id) => {
+  Listing.findOne({id: id}, (err, obj) => {
+    if (err) {
+      console.log('Mongoose fetch error:', err);
+    } else {
+      console.log('Successfully fetched listing:', obj)
+    }
+  })
+}
+
+
 module.exports.db = db;
 module.exports.Listing = Listing;
-// module.exports.Neighborhood = Neighborhood;
 module.exports.Landmark = Landmark;
-// module.exports.getNextSequenceValue = getNextSequenceValue;
+module.exports.getListingData = getListingData;
 

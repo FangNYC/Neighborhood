@@ -7,7 +7,6 @@ const port = process.env.PORT || 3001;
 
 const router = require('./routes/router')
 
-// require db, which will initialize it even if `db` is not used anywhere else
 // const db = require('../database/index')
 const { db } = require('../database/mongoDB/index.js')
 
