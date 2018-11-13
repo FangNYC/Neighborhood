@@ -11,6 +11,8 @@ class Map extends React.Component {
     return (
       <div id="map-section">
         <div>Map Placeholder</div>
+        <div>LONG: {this.props.long}</div>
+        <div>LAT: {this.props.lat}</div>
         {/* <MapContainer 
           isMarkerShown 
           lat={this.props.lat} 

@@ -6,6 +6,12 @@ const hstore = require('pg-hstore');
 const db = new Sequelize('neighborhood', 'root', 'hrnyc18',
   {
     dialect: 'postgres',
+    pool: {
+      max: 10,
+      min: 1,
+      idle: 10000
+    },
+    logging: false
   } 
 )
 
