@@ -1,7 +1,7 @@
 const models = require('../models/models');
+const { generateDummyArray } = require('./../models/dummyData/generateListingsArray');
+const Listing = models.listingSchema;
 
-// This module will be populated with methods to fulfill requests from the client
-// It can invoke the models to do so
 module.exports = {
   getListingData: (req, res) => { 
     models.getListingData(req.query.id)
@@ -37,5 +37,35 @@ module.exports = {
     .catch((err) => {
       console.error(err);
     })
-  }
+  },
+
+  ////////// POST METHODS FOR DB TESTING PURPOSES ONLY ////////
+
+  postListingData: (req, res) => { 
+    generateDummyArray(1)
+      .then((result) => {
+        var listing = result;
+        Listing.bulkCreate(listing, {returning: true})
+          .then((result) => {
+            console.log('One record sucessfully added to listings');
+            res.send();
+            return result[0].dataValues.id;
+          })
+          .then((listingId) => {
+            Listing.destroy({
+              where: {
+                id: listingId
+              }
+            })
+              .then(() => {
+                console.log('Test post deleted')
+              })
+          })
+      .catch((error) => {
+        console.log('Error adding record to db:', error);
+      })
+        
+      })
+  }, 
+
 }

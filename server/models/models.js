@@ -93,6 +93,10 @@ const Landmark = db.define('landmark', {
 
 //////// DATABASE METHODS ////////////
 
+const postListingData = (obj) => {
+  
+}
+
 const getListingData = (id) => {
   return Listing.findAll({
     where: {
