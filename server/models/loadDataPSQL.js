@@ -1,7 +1,7 @@
 const async = require('async');
 const models = require('./models.js');
 var { fork } = require('child_process');
-const { generateDummyArray } = require('./dummyData/generateListingsArray')
+const { generateDummyArray } = require('./dummyData/generateListingsArray');
 const generatedLandmarks = require('./dummyData/generateLandmarksData.js');
 const neighbs = require('./dummyData/neighbsData.js').neighbsArray;
 const Listing = models.listingSchema;
@@ -10,7 +10,7 @@ const Landmark = models.landmarkSchema;
 const landmarks = generatedLandmarks.landmarksData;
 
 // ====================================================================
-// This script generates 10M listings records and injects into Postgres
+// This script generates 10M listings records and injects into Postgres 
 // ====================================================================
 
 var totalAdded = 0;
