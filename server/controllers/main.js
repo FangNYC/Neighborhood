@@ -6,7 +6,12 @@ module.exports = {
   getListingData: (req, res) => { 
     models.getListingData(req.query.id)
     .then((listing) => {
-      res.send(listing);
+      if (listing.length < 1) {
+        res.status(404);
+        res.send('Not Found');
+      } else {
+        res.send(listing);
+      }
     })
     .catch((err) => {
       console.error(err);

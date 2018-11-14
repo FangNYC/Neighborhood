@@ -10,16 +10,33 @@ describe('Test the root path', () => {
 })
 
 describe('Test the listing data api', () => {
+
+  // beforeAll(() => {
+  //   mongoDB.connect();
+  // });
+
+  // afterAll((done) => {
+  //   mongoDB.disconnect(done);
+  // });
+
   test('It should respond to GET for id 123', () => {
     return request(app)
-      .get('/listingdata/123')
-      .expect(200)
-  }),
-  test('It should respond to GET for id 8000000', () => {
-    return request(app)
-      .get('/listingdata/8000000')
+      .get('/listingdata?id=123')
       .expect(200)
   })
+
+  test('It should respond to GET for id 5000000', () => {
+    return request(app)
+      .get('/listingdata?id=5000000')
+      .expect(200)
+  })
+
+  test('It should respond to GET for id 9000000', () => {
+    return request(app)
+      .get('/listingdata?id=9000000')
+      .expect(200)
+  })
+
 })
 
 describe('Test the neighborhood data api', () => {
