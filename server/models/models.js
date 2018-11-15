@@ -93,8 +93,25 @@ const Landmark = db.define('landmark', {
 
 //////// DATABASE METHODS ////////////
 
-const postListingData = (obj) => {
-  
+const addListings = (listingsArray) => {
+  var size = listingsArray.length;
+  Listing.bulkCreate(listingsArray, {returning: true})
+    .then((result) => {
+      console.log('Records added:', size);
+      return result[0].dataValues.id;
+    })
+}
+
+const deleteListing = (listingId, res) => {
+  Listing.destroy({
+    where: {
+      id: listingId
+    }
+  })
+    .then(() => {
+      console.log('1 post deleted');
+      res.send();
+    })
 }
 
 const getListingData = (id) => {
@@ -136,6 +153,8 @@ const getLandmarkData = () => {
   })
 }
 
+exports.addListings = addListings;
+exports.deleteListing = deleteListing;
 exports.getListingData = getListingData;
 exports.getNeighbData = getNeighbData;
 exports.calcNearestLandmarks = calcNearestLandmarks;

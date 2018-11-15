@@ -7,9 +7,9 @@ router.get('/listingdata', controller.getListingData);
 router.get('/neighborhooddata', controller.getNeighbData);
 router.get('/landmarkdata', controller.getLandmarkData);
 
-////// Post functionality for testing purposes only //////
+////// Post + Delete routes for testing purposes only //////
 router.post('/listingdata', controller.postListingData);
-
+router.delete('/listingdata', controller.deleteListingData)
 
 
 router.get('/app.js', (req, res) => {

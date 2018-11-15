@@ -1,5 +1,6 @@
 const app = require('./../server/server.js');
 const request = require('supertest');
+const { getListingData } = require('./../server/models/models.js')
 
 describe('Test the root path', () => {
   test('It should respond 200 to GET /', () => {
@@ -22,30 +23,6 @@ describe('Test GET from listing data api', () => {
   test('It should respond 200 for id 123', () => {
     return request(app)
       .get('/listingdata?id=123')
-      .expect(200)
-  })
-
-  test('It should respond 200 for id 5000000', () => {
-    return request(app)
-      .get('/listingdata?id=5000000')
-      .expect(200)
-  })
-
-  test('It should respond 200 for id 9000000', () => {
-    return request(app)
-      .get('/listingdata?id=9000000')
-      .expect(200)
-  })
-
-  test('It should respond 200 for id 2000000', () => {
-    return request(app)
-      .get('/listingdata?id=2000000')
-      .expect(200)
-  })
-
-  test('It should respond 200 for id 3000000', () => {
-    return request(app)
-      .get('/listingdata?id=3000000')
       .expect(200)
   })
 
@@ -73,5 +50,14 @@ describe('Test get from the landmarks data api', () => {
     return request(app)
       .get('/landmarksdata?id=123')
       .expect(200)
+  })
+})
+
+describe('Test PSQL fetch listings table', () => {
+  test('It should fetch data through Sequelize', () => {
+    return 
+    getListingData(9000000);
+
+
   })
 })

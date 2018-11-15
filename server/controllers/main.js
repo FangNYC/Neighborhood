@@ -1,7 +1,9 @@
 const models = require('../models/models');
 const { generateDummyArray } = require('./../models/dummyData/generateListingsArray');
 const Listing = models.listingSchema;
-
+const { addListings } = require('./../models/models.js')
+const { deleteListing } = require('./../models/models.js')
+ 
 module.exports = {
   getListingData: (req, res) => { 
     models.getListingData(req.query.id)
@@ -39,33 +41,21 @@ module.exports = {
     })
   },
 
-  ////////// POST METHODS FOR DB TESTING PURPOSES ONLY ////////
+  ////////// POST + DELETE METHODS FOR DB TESTING PURPOSES ONLY ////////
 
   postListingData: (req, res) => { 
     generateDummyArray(1)
       .then((result) => {
-        var listing = result;
-        Listing.bulkCreate(listing, {returning: true})
-          .then((result) => {
-            console.log('One record sucessfully added to listings');
-            res.send();
-            return result[0].dataValues.id;
-          })
-          .then((listingId) => {
-            Listing.destroy({
-              where: {
-                id: listingId
-              }
-            })
-              .then(() => {
-                console.log('Test post deleted')
-              })
-          })
-      .catch((error) => {
-        console.log('Error adding record to db:', error);
+        var listings = result;
+        addListings(listings);
+        res.send()
       })
-        
-      })
-  }, 
+  },
+
+  deleteListingData: (req, res) => {
+    var listingId = req.query.id;
+    console.log('delete listing id:', listingId)
+    deleteListing(listingId, res)
+  }
 
 }
