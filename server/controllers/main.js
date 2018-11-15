@@ -42,14 +42,13 @@ module.exports = {
   },
 
   ////////// POST + DELETE METHODS FOR DB TESTING PURPOSES ONLY ////////
-
+  
   postListingData: (req, res) => { 
-    generateDummyArray(1)
-      .then((result) => {
-        var listings = result;
-        addListings(listings);
-        res.send()
-      })
+    console.log('SHOW THE REQUEST?', req)
+    addListings(listings, (newId) => {
+      console.log('NEW ID', newId) 
+      res.send();
+    });
   },
 
   deleteListingData: (req, res) => {

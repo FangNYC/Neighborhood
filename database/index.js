@@ -3,6 +3,7 @@ const pg = require('pg');
 const hstore = require('pg-hstore');
 // const dbpw = require('../config.js').AmazonDBpw;
 
+////////// Set up Postgres connection //////////
 const db = new Sequelize('neighborhood', 'root', 'hrnyc18',
   {
     dialect: 'postgres',
