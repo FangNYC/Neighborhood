@@ -79,6 +79,7 @@ describe('Test raw Postgres READ / WRITE', () => {
       if (err) {
         console.log(err);
       } else {
+        console.log('RESULT FROM POSTGRES QUERY:', result.rows[0]);
         expect(result.rows[0].id).toBe(9000000)
         done();
       }
@@ -143,24 +144,6 @@ const connection = client.connect()
 
 describe('Test raw MongoDB READ / WRITE', () => {
 
-  test('It should read 1 listing from the database in 0-10% position', (done) => {
-    const connect = connection;
-    connect.then(() => {
-
-      const db = client.db(dbName)
-      const collection = db.collection('listings')
-      collection.findOne({id: 100}, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          expect(result.id).toBe(100);
-          done();
-        }
-      })
-
-    })
-  })
-
   test('It should insert one new listing directly to MongoDB', (done) => {
     const connect = connection;
     connect.then(() => {
@@ -171,12 +154,54 @@ describe('Test raw MongoDB READ / WRITE', () => {
         if(err) {
           console.log(err)
         } else {
+          console.log("Documented added to MongoDB:", result.ops[0])
           expect(result.result.n).toBe(1);
+          done();
+        }
+      })
+    })
+  })
+
+  test('It should read 1 listing from the database in 0-10% position', (done) => {
+    const connect = connection;
+    connect.then(() => {
+
+      const db = client.db(dbName)
+      const collection = db.collection('listings')
+      collection.findOne({id: 100}, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('RESULT FROM MONGODB QUERY:', result);
+          expect(result.id).toBe(100);
           done();
         }
       })
 
     })
+  })
+
+  test('It should read 1 listing from the database in 0-10% position', (done) => {
+    const connect = connection;
+    connect.then(() => {
+
+      const db = client.db(dbName)
+      const collection = db.collection('listings')
+      collection.findOne({id: 11000000}, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('RESULT FROM MONGODB QUERY:', result);
+          expect(result.id).toBe(100);
+          done();
+        }
+      })
+
+    })
+  })
+
+  afterAll(() => {
+    connection.close();
   })
 
 })
