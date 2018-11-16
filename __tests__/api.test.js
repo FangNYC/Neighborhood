@@ -3,7 +3,9 @@ const request = require('supertest');
 const { getListingData } = require('./../server/models/models.js');
 const { generateDummyArray } = require('./../server/models/dummyData/generateListingsArray');
 const faker = require('faker');
-const { Pool, Client } = require('pg');
+const mongoose = require('mongoose');
+const { Listing } = require('./../database/mongoDB/index.js');
+const MongoClient = require('mongodb').MongoClient;
 
 ////////// API TESTS //////////
 
@@ -38,8 +40,6 @@ describe('Test the server API fetching', () => {
 
 const testValues = [faker.name.firstName(), Math.floor(Math.random() * 15) + 1, faker.lorem.paragraph(), faker.lorem.paragraph(), Number((Math.random() * 100).toFixed(6)), Number((Math.random() * 100).toFixed(6)), "2018-11-12 15:52:31.126-05", "2018-11-12 15:52:31.126-05"]
 
-console.log('TEST VALUES', testValues);
-
 describe('Test raw Postgres READ / WRITE', () => {
 
   beforeAll(() => {
@@ -53,8 +53,39 @@ describe('Test raw Postgres READ / WRITE', () => {
     })
   })
 
-  test('It should insert one new listing directly to Postgres', (done) => {
+  test('It should read 1 listing from the database in 0-10% position', (done) => {
+    var testId = 100
+    var sql = `
+      SELECT * FROM listings WHERE id=${testId}
+    `;
 
+    pool.query(sql, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        expect(result.rows[0].id).toBe(100)
+        done();
+      }
+    })
+  })
+
+  test('It should read 1 listing from the database in 90%+ position', (done) => {
+    var testId = 9000000
+    var sql = `
+      SELECT * FROM listings WHERE id=${testId}
+    `;
+
+    pool.query(sql, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        expect(result.rows[0].id).toBe(9000000)
+        done();
+      }
+    })
+  })
+
+  test('It should insert one new listing directly to Postgres', (done) => {
     var sql = 
     `
       INSERT INTO listings ("hostFirstName", "neighbId", "neighbDesc", "gettingAroundDesc", "listingLat", "listingLong", "createdAt", "updatedAt") 
@@ -73,12 +104,6 @@ describe('Test raw Postgres READ / WRITE', () => {
     })
     done();
   })
-
-  // test('It should delete the added listing', (done) => {
-      
-
-  // })
-
   
   afterAll(() => {
     pool.end();
@@ -86,11 +111,72 @@ describe('Test raw Postgres READ / WRITE', () => {
 
 })
 
+//////// MONGODB TESTS //////////
 
-  // beforeAll(() => {
-  //   mongoDB.connect();
-  // });
+const testListing = new Listing({
+  "id": 11000000,
+  "hostFirstName": faker.name.firstName(),
+  "city": 'London',
+  "region": 'England',
+  "country": 'United Kingdom',
+  "neighb": 1,
+  "listingLat": Number((Math.random() * 100).toFixed(6)),
+  "listingLong": Number((Math.random() * 100).toFixed(6)),
+  "neighbDesc": faker.lorem.paragraph(),
+  "gettingAroundDesc": faker.lorem.paragraph(),
+  "feature1": faker.lorem.words(),
+  "feature2": faker.lorem.words(),
+  "feature3": faker.lorem.words(),
+  "feature4": faker.lorem.words(),
+  "feature5": faker.lorem.words(),
+  "feature6": faker.lorem.words(),
+  "feature7": faker.lorem.words()
+})
 
-  // afterAll((done) => {
-  //   mongoDB.disconnect(done);
-  // });
+// At present, setting up mongo connection without Before All. 
+// TODO: figure out how to access before all scope in subsequent tests.
+
+const url = 'mongodb://localhost/neighborhood';
+const dbName = 'neighborhood';
+const client = new MongoClient(url);
+const connection = client.connect() 
+
+describe('Test raw MongoDB READ / WRITE', () => {
+
+  test('It should read 1 listing from the database in 0-10% position', (done) => {
+    const connect = connection;
+    connect.then(() => {
+
+      const db = client.db(dbName)
+      const collection = db.collection('listings')
+      collection.findOne({id: 100}, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          expect(result.id).toBe(100);
+          done();
+        }
+      })
+
+    })
+  })
+
+  test('It should insert one new listing directly to MongoDB', (done) => {
+    const connect = connection;
+    connect.then(() => {
+
+      const db = client.db(dbName);
+      const collection = db.collection('listings');
+      collection.insertOne(testListing, (err, result) => {
+        if(err) {
+          console.log(err)
+        } else {
+          expect(result.result.n).toBe(1);
+          done();
+        }
+      })
+
+    })
+  })
+
+})

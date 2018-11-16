@@ -11,7 +11,7 @@
     "react-dev": "webpack -d --watch",
     "react-prod": "webpack -p",
     "start-dev": "nodemon ./server/server.js",
-    "test": "jest",
+    "test": "jest ./__tests__/api.test.js && jest ./__tests__/psql.test.js",
     "connect": "ssh -i \"neighborhood-ec2-keypair.pem\" ubuntu@ec2-3-16-89-66.us-east-2.compute.amazonaws.com",
     "start-pm2": "pm2 start ./server/server.js",
     "list-pm2": "pm2 list",
@@ -51,6 +51,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "faker": "^4.1.0",
+    "mongodb": "^3.1.9",
     "mongoose": "^5.3.11",
     "mongoose-plugin-autoinc": "^1.1.9",
     "mongoose-sequence": "^4.0.1",
@@ -67,6 +68,7 @@
     "webpack-cli": "^3.1.2"
   },
   "jest": {
-    "testURL": "http://localhost/"
+    "testURL": "http://localhost/",
+    "verbose": true
   }
 }
