@@ -188,26 +188,62 @@ describe('Test raw Postgres READ / WRITE', () => {
 })
 
 //////// POSTGRES + SEQUELIZE //////////
-const db = require('./../database/index.js');
+
 
 describe('Test Postgres + Sequelize READ / WRITE', () => {
 
-  // beforeAll(() => {
-    
-  // })
+  beforeAll(() => {
+    // return db = require('./../database/index.js');
+  })
 
   test('It should read 1 listing with id 100', (done) => {
     var testId = 100
     getListingData(testId)
       .then((result) => {
-        console.log("RESD", result[0].dataValues.id);
+        expect(result[0].dataValues.id).toBe(testId)
+      })
+    done();
+  })
+
+  test('It should read 1 listing with id 100,000', (done) => {
+    var testId = 100000
+    getListingData(testId)
+      .then((result) => {
+        expect(result[0].dataValues.id).toBe(testId)
+      })
+    done();
+  })
+
+  test('It should read 1 listing with id 1,000,000', (done) => {
+    var testId = 1000000
+    getListingData(testId)
+      .then((result) => {
+        expect(result[0].dataValues.id).toBe(testId)
+      })
+    done();
+  })
+
+  test('It should read 1 listing with id 5,000,000', (done) => {
+    var testId = 5000000
+    getListingData(testId)
+      .then((result) => {
+        expect(result[0].dataValues.id).toBe(testId)
+      })
+    done();
+  })
+
+  test('It should read 1 listing with id 9,999,999', (done) => {
+    var testId = 9999999
+    getListingData(testId)
+      .then((result) => {
+        console.log("Result from Postgres via Sequelize fetch", result[0].dataValues);
         expect(result[0].dataValues.id).toBe(testId)
       })
     done();
   })
   
   // afterAll(() => {
-  //   pool.end();
+  //   db.close();
   // })
 
 })
@@ -282,7 +318,7 @@ describe('Test raw MongoDB READ / WRITE', () => {
   })
 
 
-  test('It should read 1 listing with id 100000', (done) => {
+  test('It should read 1 listing with id 100,000', (done) => {
     const connect = connection;
     connect.then(() => {
 
@@ -301,7 +337,7 @@ describe('Test raw MongoDB READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing with id 500000', (done) => {
+  test('It should read 1 listing with id 500,000', (done) => {
     const connect = connection;
     connect.then(() => {
 
@@ -320,7 +356,7 @@ describe('Test raw MongoDB READ / WRITE', () => {
     })
   })
 
-   test('It should read 1 listing with id 1000000', (done) => {
+   test('It should read 1 listing with id 1,000,000', (done) => {
     const connect = connection;
     connect.then(() => {
 
@@ -339,7 +375,7 @@ describe('Test raw MongoDB READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing with id 9000000', (done) => {
+  test('It should read 1 listing with id 9,000,000', (done) => {
     const connect = connection;
     connect.then(() => {
 
