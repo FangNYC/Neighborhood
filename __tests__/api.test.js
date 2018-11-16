@@ -7,7 +7,9 @@ const mongoose = require('mongoose');
 const { Listing } = require('./../database/mongoDB/index.js');
 const MongoClient = require('mongodb').MongoClient;
 
-////////// API TESTS //////////
+//============================================================
+//                        API UNIT TESTS 
+//============================================================
 
 describe('Test the server API fetching - current hookup: POSTGRES', () => {
   test('It should respond 200 to root path', () => {
@@ -60,7 +62,9 @@ describe('Test the server API fetching - current hookup: POSTGRES', () => {
 
 })
 
-////////// POSTGRES TESTS //////////
+//============================================================
+//                   RAW POSTGRES UNIT TESTS 
+//============================================================
 
 const testValues = [faker.name.firstName(), Math.floor(Math.random() * 15) + 1, faker.lorem.paragraph(), faker.lorem.paragraph(), Number((Math.random() * 100).toFixed(6)), Number((Math.random() * 100).toFixed(6)), "2018-11-12 15:52:31.126-05", "2018-11-12 15:52:31.126-05"]
 
@@ -187,7 +191,9 @@ describe('Test raw Postgres READ / WRITE', () => {
 
 })
 
-//////// POSTGRES + SEQUELIZE //////////
+//============================================================
+//              POSTGRES VIA SEQUELIZE UNIT TESTS 
+//============================================================
 
 
 describe('Test Postgres + Sequelize READ / WRITE', () => {
@@ -248,7 +254,9 @@ describe('Test Postgres + Sequelize READ / WRITE', () => {
 
 })
 
-//////// MONGODB TESTS //////////
+//=================================================
+//                MONGODB UNIT TESTS 
+//=================================================
 
 const testListing = new Listing({
   "id": 11000000,
