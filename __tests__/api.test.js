@@ -9,16 +9,40 @@ const MongoClient = require('mongodb').MongoClient;
 
 ////////// API TESTS //////////
 
-describe('Test the server API fetching', () => {
+describe('Test the server API fetching - current hookup: POSTGRES', () => {
   test('It should respond 200 to root path', () => {
     return request(app)
       .get('/')
       .expect(200)
   })
 
-  test('It should respond 200 to GET listingdata for id 123', () => {
+  test('It should respond 200 to GET listingdata with id 100', () => {
     return request(app)
-      .get('/listingdata?id=123')
+      .get('/listingdata?id=100')
+      .expect(200)
+  })
+
+  test('It should respond 200 to GET listingdata with id 100000', () => {
+    return request(app)
+      .get('/listingdata?id=100000')
+      .expect(200)
+  })
+
+  test('It should respond 200 to GET listingdata with id 1000000', () => {
+    return request(app)
+      .get('/listingdata?id=1000000')
+      .expect(200)
+  })
+
+  test('It should respond 200 to GET listingdata with id 5000000', () => {
+    return request(app)
+      .get('/listingdata?id=5000000')
+      .expect(200)
+  })
+
+  test('It should respond 200 to GET listingdata with id 9999999', () => {
+    return request(app)
+      .get('/listingdata?id=9999999')
       .expect(200)
   })
 
@@ -53,7 +77,7 @@ describe('Test raw Postgres READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing from the database in 0-10% position', (done) => {
+  test('It should read 1 listing with id 100', (done) => {
     var testId = 100
     var sql = `
       SELECT * FROM listings WHERE id=${testId}
@@ -63,14 +87,14 @@ describe('Test raw Postgres READ / WRITE', () => {
       if (err) {
         console.log(err);
       } else {
-        expect(result.rows[0].id).toBe(100)
+        expect(result.rows[0].id).toBe(testId)
         done();
       }
     })
   })
 
-  test('It should read 1 listing from the database in 90%+ position', (done) => {
-    var testId = 9000000
+  test('It should read 1 listing with id 100000', (done) => {
+    var testId = 100000
     var sql = `
       SELECT * FROM listings WHERE id=${testId}
     `;
@@ -79,8 +103,59 @@ describe('Test raw Postgres READ / WRITE', () => {
       if (err) {
         console.log(err);
       } else {
-        console.log('RESULT FROM POSTGRES QUERY:', result.rows[0]);
-        expect(result.rows[0].id).toBe(9000000)
+        // console.log('RESULT FROM POSTGRES QUERY:', result.rows[0]);
+        expect(result.rows[0].id).toBe(testId)
+        done();
+      }
+    })
+  })
+
+  test('It should read 1 listing with id 1000000', (done) => {
+    var testId = 1000000
+    var sql = `
+      SELECT * FROM listings WHERE id=${testId}
+    `;
+
+    pool.query(sql, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // console.log('RESULT FROM POSTGRES QUERY:', result.rows[0]);
+        expect(result.rows[0].id).toBe(testId)
+        done();
+      }
+    })
+  })
+
+  test('It should read 1 listing with id 5000000', (done) => {
+    var testId = 5000000
+    var sql = `
+      SELECT * FROM listings WHERE id=${testId}
+    `;
+
+    pool.query(sql, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // console.log('RESULT FROM POSTGRES QUERY:', result.rows[0]);
+        expect(result.rows[0].id).toBe(testId)
+        done();
+      }
+    })
+  })
+
+  test('It should read 1 listing with id 9999999', (done) => {
+    var testId = 9999999
+    var sql = `
+      SELECT * FROM listings WHERE id=${testId}
+    `;
+
+    pool.query(sql, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // console.log('RESULT FROM POSTGRES QUERY:', result.rows[0]);
+        expect(result.rows[0].id).toBe(testId)
         done();
       }
     })
@@ -109,6 +184,31 @@ describe('Test raw Postgres READ / WRITE', () => {
   afterAll(() => {
     pool.end();
   })
+
+})
+
+//////// POSTGRES + SEQUELIZE //////////
+const db = require('./../database/index.js');
+
+describe('Test Postgres + Sequelize READ / WRITE', () => {
+
+  // beforeAll(() => {
+    
+  // })
+
+  test('It should read 1 listing with id 100', (done) => {
+    var testId = 100
+    getListingData(testId)
+      .then((result) => {
+        console.log("RESD", result[0].dataValues.id);
+        expect(result[0].dataValues.id).toBe(testId)
+      })
+    done();
+  })
+  
+  // afterAll(() => {
+  //   pool.end();
+  // })
 
 })
 
@@ -154,7 +254,7 @@ describe('Test raw MongoDB READ / WRITE', () => {
         if(err) {
           console.log(err)
         } else {
-          console.log("Documented added to MongoDB:", result.ops[0])
+          // console.log("Documented added to MongoDB:", result.ops[0])
           expect(result.result.n).toBe(1);
           done();
         }
@@ -162,7 +262,7 @@ describe('Test raw MongoDB READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing from the database in 0-10% position', (done) => {
+  test('It should read 1 listing with id 100', (done) => {
     const connect = connection;
     connect.then(() => {
 
@@ -172,7 +272,7 @@ describe('Test raw MongoDB READ / WRITE', () => {
         if (err) {
           console.log(err);
         } else {
-          console.log('RESULT FROM MONGODB QUERY:', result);
+          // console.log('RESULT FROM MONGODB QUERY:', result);
           expect(result.id).toBe(100);
           done();
         }
@@ -181,24 +281,83 @@ describe('Test raw MongoDB READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing from the database in 0-10% position', (done) => {
+
+  test('It should read 1 listing with id 100000', (done) => {
     const connect = connection;
     connect.then(() => {
 
       const db = client.db(dbName)
       const collection = db.collection('listings')
-      collection.findOne({id: 11000000}, (err, result) => {
+      collection.findOne({id: 100000}, (err, result) => {
         if (err) {
           console.log(err);
         } else {
-          console.log('RESULT FROM MONGODB QUERY:', result);
-          expect(result.id).toBe(100);
+          // console.log('RESULT FROM MONGODB QUERY:', result);
+          expect(result.id).toBe(100000);
           done();
         }
       })
 
     })
   })
+
+  test('It should read 1 listing with id 500000', (done) => {
+    const connect = connection;
+    connect.then(() => {
+
+      const db = client.db(dbName)
+      const collection = db.collection('listings')
+      collection.findOne({id: 500000}, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          // console.log('RESULT FROM MONGODB QUERY:', result);
+          expect(result.id).toBe(500000);
+          done();
+        }
+      })
+
+    })
+  })
+
+   test('It should read 1 listing with id 1000000', (done) => {
+    const connect = connection;
+    connect.then(() => {
+
+      const db = client.db(dbName)
+      const collection = db.collection('listings')
+      collection.findOne({id: 1000000}, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          // console.log('RESULT FROM MONGODB QUERY:', result);
+          expect(result.id).toBe(1000000);
+          done();
+        }
+      })
+
+    })
+  })
+
+  test('It should read 1 listing with id 9000000', (done) => {
+    const connect = connection;
+    connect.then(() => {
+
+      const db = client.db(dbName)
+      const collection = db.collection('listings')
+      collection.findOne({id: 9000000}, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          // console.log('RESULT FROM MONGODB QUERY:', result);
+          expect(result.id).toBe(9000000);
+          done();
+        }
+      })
+
+    })
+  })
+
 
   afterAll(() => {
     connection.close();

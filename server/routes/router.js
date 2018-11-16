@@ -11,7 +11,6 @@ router.get('/landmarkdata', controller.getLandmarkData);
 router.post('/listingdata', controller.postListingData);
 router.delete('/listingdata', controller.deleteListingData)
 
-
 router.get('/app.js', (req, res) => {
   res.redirect('public/app.js');
 })

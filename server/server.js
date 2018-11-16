@@ -7,12 +7,12 @@ const router = require('./routes/router')
 const app = express();
 const port = process.env.PORT || 3001;
 
-////////// IN PROGRESS: SWTICH BETWEEN 2 DBMS //////////
+////////// UNCOMMENT DB TO USE //////////
 
 const db = require('../database/index')
 // const { db } = require('../database/mongoDB/index.js')
 
-////////////////////////////////////////////////////////
+/////////////////////////////////////////
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '../public')));
