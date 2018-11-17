@@ -2,13 +2,17 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const parser = require('body-parser')
+const router = require('./routes/router')
+
 const app = express();
 const port = process.env.PORT || 3001;
 
-const router = require('./routes/router')
+////////// UNCOMMENT DB TO USE //////////
 
-// const db = require('../database/index')
-const { db } = require('../database/mongoDB/index.js')
+const db = require('../database/index')
+// const { db } = require('../database/mongoDB/index.js')
+
+/////////////////////////////////////////
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '../public')));
@@ -18,3 +22,5 @@ app.use('/', router);
 app.listen(port, () => {
   console.log(`server running at: http://localhost:${port}`);
 });
+
+module.exports = app;

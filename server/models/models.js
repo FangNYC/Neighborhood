@@ -2,6 +2,7 @@ const db = require('../../database/index');
 const Sequelize = require('sequelize');
 const turf = require('@turf/turf');
 const distance = require('@turf/distance');
+const pg = require('pg');
 
 // Define Listing schema
 const Listing = db.define('listing', {
@@ -93,6 +94,38 @@ const Landmark = db.define('landmark', {
 
 //////// DATABASE METHODS ////////////
 
+const addListings = (listingsArray, callback) => {
+  var size = listingsArray.length;
+  Listing.bulkCreate(listingsArray, {returning: true})
+    .then((result) => {
+      console.log('Records added:', size);
+      return result[0].dataValues.id;
+    })
+    .then((id) => {
+      callback(id)
+    })
+}
+
+const deleteListing = (listingId, res) => {
+
+  if (listingId) {
+    Listing.destroy({
+      where: {
+        id: listingId
+      }
+    })
+    .then(() => {
+      console.log('1 post deleted with id:', listingId);
+      res.send();
+    })
+    .catch((error) => {
+      console.log('Destroy error:', error);
+    })
+  } else {
+    console.log('Error: no record selected to delete');
+  }
+}
+
 const getListingData = (id) => {
   return Listing.findAll({
     where: {
@@ -132,6 +165,8 @@ const getLandmarkData = () => {
   })
 }
 
+exports.addListings = addListings;
+exports.deleteListing = deleteListing;
 exports.getListingData = getListingData;
 exports.getNeighbData = getNeighbData;
 exports.calcNearestLandmarks = calcNearestLandmarks;

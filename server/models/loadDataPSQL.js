@@ -1,7 +1,7 @@
 const async = require('async');
 const models = require('./models.js');
 var { fork } = require('child_process');
-const { generateDummyArray } = require('./dummyData/generateListingsArray')
+const { generateDummyArray } = require('./dummyData/generateListingsArray');
 const generatedLandmarks = require('./dummyData/generateLandmarksData.js');
 const neighbs = require('./dummyData/neighbsData.js').neighbsArray;
 const Listing = models.listingSchema;
@@ -9,7 +9,13 @@ const Neighborhood = models.neighborhoodSchema;
 const Landmark = models.landmarkSchema;
 const landmarks = generatedLandmarks.landmarksData;
 
+// ====================================================================
+// This script generates 10M listings records and injects into Postgres 
+// ====================================================================
+
 var totalAdded = 0;
+var BATCH_SIZE = 10000;
+var NUM_CYCLES = 1000;
 
 const insertAsync = (callback) => {
     
@@ -18,7 +24,7 @@ const insertAsync = (callback) => {
       Listing.bulkCreate(array)
         .then(() => {
           console.log('RAM usage:', process.memoryUsage().heapUsed/1000000, 'MBs');
-          totalAdded += 10000;
+          totalAdded += BATCH_SIZE;
           console.log('Current total records:', totalAdded);
           resolve();
         })
@@ -31,8 +37,8 @@ const insertAsync = (callback) => {
   async function initialize() {
     console.log('****** Begin Data Injection ******')
     var begin = Date.now();
-    for (let i = 0; i < 1000; i++) {
-      var listingArray = await generateDummyArray()
+    for (let i = 0; i < NUM_CYCLES; i++) {
+      var listingArray = await generateDummyArray(BATCH_SIZE)
       await insert(listingArray);
     }
     var end = Date.now();

@@ -11,7 +11,7 @@
     "react-dev": "webpack -d --watch",
     "react-prod": "webpack -p",
     "start-dev": "nodemon ./server/server.js",
-    "test": "jest",
+    "test": "jest ./__tests__/api.test.js && jest ./__tests__/psql.test.js",
     "connect": "ssh -i \"neighborhood-ec2-keypair.pem\" ubuntu@ec2-3-16-89-66.us-east-2.compute.amazonaws.com",
     "start-pm2": "pm2 start ./server/server.js",
     "list-pm2": "pm2 list",
@@ -29,15 +29,18 @@
   },
   "homepage": "https://github.com/Staybnb/Neighborhood#readme",
   "devDependencies": {
-    "jest": "^22.3.0",
+    "jest": "^22.4.4",
     "morgan": "^1.9.0",
     "puppeteer": "^1.9.0",
     "random-points-on-polygon": "0.0.4",
+    "superagent": "^4.0.0-beta.5",
+    "supertest": "^3.3.0",
     "turf": "^3.0.14"
   },
   "dependencies": {
     "@turf/distance": "^6.0.1",
     "@turf/turf": "^5.1.6",
+    "artillery": "^1.6.0-25",
     "async": "^2.6.1",
     "axios": "^0.18.0",
     "babel-core": "^6.26.0",
@@ -49,12 +52,14 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "faker": "^4.1.0",
+    "mongodb": "^3.1.9",
     "mongoose": "^5.3.11",
     "mongoose-plugin-autoinc": "^1.1.9",
     "mongoose-sequence": "^4.0.1",
+    "newrelic": "^4.11.0",
     "nodemon": "^1.18.6",
     "path": "^0.12.7",
-    "pg": "^7.6.0",
+    "pg": "^7.6.1",
     "pg-hstore": "^2.3.2",
     "pm2": "^3.2.2",
     "react": "^16.2.0",
@@ -63,5 +68,9 @@
     "sequelize": "^4.41.0",
     "webpack": "^3.11.0",
     "webpack-cli": "^3.1.2"
+  },
+  "jest": {
+    "testURL": "http://localhost/",
+    "verbose": true
   }
 }
