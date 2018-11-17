@@ -2,7 +2,7 @@ const router = require('express').Router();
 const controller = require('../controllers/main');
 const path = require('path');
 
-router.get('/', (req, res) => {res.send('Hello, world')});
+router.get('/', (req, res) => {res.send()});
 router.get('/listingdata', controller.getListingData);
 router.get('/neighborhooddata', controller.getNeighbData);
 router.get('/landmarkdata', controller.getLandmarkData);

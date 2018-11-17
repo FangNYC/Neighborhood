@@ -12,6 +12,7 @@ module.exports = {
         res.status(404);
         res.send('Not Found');
       } else {
+        console.log("GET LISTING DATA HIT")
         res.send(listing);
       }
     })
