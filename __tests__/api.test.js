@@ -24,25 +24,25 @@ describe('Test the server API fetching - current hookup: POSTGRES', () => {
       .expect(200)
   })
 
-  test('It should respond 200 to GET listingdata with id 100000', () => {
+  test('It should respond 200 to GET listingdata with id 100,000', () => {
     return request(app)
       .get('/listingdata?id=100000')
       .expect(200)
   })
 
-  test('It should respond 200 to GET listingdata with id 1000000', () => {
+  test('It should respond 200 to GET listingdata with id 1,000,000', () => {
     return request(app)
       .get('/listingdata?id=1000000')
       .expect(200)
   })
 
-  test('It should respond 200 to GET listingdata with id 5000000', () => {
+  test('It should respond 200 to GET listingdata with id 5,000,000', () => {
     return request(app)
       .get('/listingdata?id=5000000')
       .expect(200)
   })
 
-  test('It should respond 200 to GET listingdata with id 9999999', () => {
+  test('It should respond 200 to GET listingdata with id 9,999,999', () => {
     return request(app)
       .get('/listingdata?id=9999999')
       .expect(200)
@@ -97,7 +97,7 @@ describe('Test raw Postgres READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing with id 100000', (done) => {
+  test('It should read 1 listing with id 100,000', (done) => {
     var testId = 100000
     var sql = `
       SELECT * FROM listings WHERE id=${testId}
@@ -114,7 +114,7 @@ describe('Test raw Postgres READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing with id 1000000', (done) => {
+  test('It should read 1 listing with id 1,000,000', (done) => {
     var testId = 1000000
     var sql = `
       SELECT * FROM listings WHERE id=${testId}
@@ -131,7 +131,7 @@ describe('Test raw Postgres READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing with id 5000000', (done) => {
+  test('It should read 1 listing with id 5,000,000', (done) => {
     var testId = 5000000
     var sql = `
       SELECT * FROM listings WHERE id=${testId}
@@ -148,7 +148,7 @@ describe('Test raw Postgres READ / WRITE', () => {
     })
   })
 
-  test('It should read 1 listing with id 9999999', (done) => {
+  test('It should read 1 listing with id 9,999,999', (done) => {
     var testId = 9999999
     var sql = `
       SELECT * FROM listings WHERE id=${testId}
