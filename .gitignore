@@ -3,6 +3,7 @@
 
 ## API Key ##
 config.js
+newrelic.js
 
 ## NPM ##
 npm

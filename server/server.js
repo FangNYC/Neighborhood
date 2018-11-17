@@ -4,6 +4,8 @@ const path = require('path');
 const parser = require('body-parser')
 const router = require('./routes/router')
 
+require('newrelic');
+
 const app = express();
 const port = process.env.PORT || 3001;
 
