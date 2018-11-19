@@ -167,7 +167,7 @@
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename">/Users/kennethpolyak/hackreactor/Neighborhood/jmeter/Test1Results.jmx</stringProp>
+        <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>
