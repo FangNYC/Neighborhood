@@ -14,18 +14,18 @@ const neighbsArray = [
   'Hackney', 'Camden Town', 'Marylebone', 'Greenwich', 'Hackney', 'Brixton', 'Islington', 'Soho', 'Paddington', 'Chelsea', 'Kensington', 'Mayfair'
 ]
 
-var totalAdded = 0;
-var counter = 0
+let totalAdded = 0;
+let counter = 0
 
-var BATCH_SIZE = 10000;
-var NUM_CYCLES = 1000;
+let BATCH_SIZE = 10000;
+let NUM_CYCLES = 1000;
 
 function generateDummyArray(i) {
   return new Promise((resolve, reject) => {
-    var scaleListingsArray = [];
-    for (var j = 0; j < BATCH_SIZE; j++) {
+    let scaleListingsArray = [];
+    for (let j = 0; j < BATCH_SIZE; j++) {
       counter++;
-      var listing = new Listing({
+      let listing = new Listing({
         "id": counter,
         "hostFirstName": faker.name.firstName(),
         "city": 'London',
@@ -69,13 +69,13 @@ const insertAsyncListing = (callback) => {
 
   async function initialize() {
     console.log('****** Begin Data Injection ******')
-    var begin = Date.now();
-    for (var i = 0; i < NUM_CYCLES; i++) {
-      var listingArray = await generateDummyArray(i)
+    let begin = Date.now();
+    for (let i = 0; i < NUM_CYCLES; i++) {
+      let listingArray = await generateDummyArray(i)
       await insertRecs(listingArray);
     }
-    var end = Date.now();
-    var timeSpent = ((end - begin) / 1000) / 60;
+    let end = Date.now();
+    let timeSpent = ((end - begin) / 1000) / 60;
     callback(timeSpent);
   }
   initialize(); 

@@ -53,7 +53,7 @@ module.exports = {
   },
 
   deleteListingData: (req, res) => {
-    var listingId = req.query.id;
+    let listingId = req.query.id;
     console.log('delete listing id:', listingId)
     deleteListing(listingId, res)
   }

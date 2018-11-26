@@ -95,7 +95,7 @@ describe('Test raw Postgres READ / WRITE', () => {
         done();
       }
     })
-  })
+  })``
 
   test('It should read 1 listing with id 100,000', (done) => {
     var testId = 100000
