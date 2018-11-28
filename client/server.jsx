@@ -9,10 +9,11 @@ class App extends React.Component {
     }
   }
 
-  render () {
+  render (props) {
+    console.log('LISTING IN SERVER JSX', this.state.listing)
     return (
       <div>
-        <Neighborhood />
+        <Neighborhood listing={this.state.listing}/>
       </div>
     )
   }
