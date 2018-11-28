@@ -5,6 +5,7 @@ const parser = require('body-parser')
 const router = require('./routes/router');
 const React = require('react');
 const ReactDOM = require('react-dom/server');
+const axios = require('axios');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -20,38 +21,34 @@ app.use(parser.json());
 
 app.use('/api', router);
 
-app.get('/test', (req, res) => {
-  res.send('test')
-})
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../public/index.html'));
+// })
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
-})
+app.get( "/*", ( req, res ) => {
 
-// app.get( "/*", ( req, res ) => {
-//   let props = {};
+  (async () => {
+    await axios.get('http://localhost:3001/api/listingdata', {
+      params: {
+        id: req.query.id
+      }
+    })
+    .then(({data}) => {
+      let props = data;
+      // TODO: get server bundle
+      let component = React.createElement(components.DescriptionServer, props);
+      let Neighborhood = ReactDom.renderToString(component);
+    });
+    res.end(htmlTemplate(Neighborhood));
+  })()
+});
 
-//   (async () => {
-//     await axios.get('http://localhost:7000/api/listingdata', {
-//       params: {
-//         id: req.query.id
-//       }
-//     })
-//     .then(({data}) => {
-//       props.Neighborhood = data;
-//       let component = React.createElement(components.DescriptionServer, props.Description);
-//       let Neighborhood = ReactDom.renderToString(component);
-//     });
-//     res.end(htmlTemplate(Neighborhood));
-//   })()
-// });
+  // const app = ReactDOM.renderToString(<App />);
+  // const reactDom = renderToString( jsx );
 
-//   // const app = ReactDOM.renderToString(<App />);
-//   // const reactDom = renderToString( jsx );
+  // res.writeHead( 200, { "Content-Type": "text/html" } );
+  // res.end( htmlTemplate( reactDom ) );
 
-//   // res.writeHead( 200, { "Content-Type": "text/html" } );
-//   // res.end( htmlTemplate( reactDom ) );
-// } );
 
 // app.disable('e-tag').disable('x-powered-by')
 
