@@ -34,7 +34,7 @@ export default class Neighborhood extends React.Component {
 
     this.setState({listingId: listingId})
     // Get listing data
-    axios.get(`/listingdata`, { params: 
+    axios.get(`api/listingdata`, { params: 
       {id: listingId}
     })
 
@@ -56,7 +56,7 @@ export default class Neighborhood extends React.Component {
     .then(() => {
       console.log('NEIGHB DATA getting')
       let neighbId = this.state.neighborhoodId;
-      axios.get('/neighborhooddata', {params: {
+      axios.get('api/neighborhooddata', {params: {
         id: neighbId
       }})
       .then(({data}) => {
@@ -75,7 +75,7 @@ export default class Neighborhood extends React.Component {
     // Get landmark data for five nearest landmarks to this location
     .then(() => {
       console.log('LANDMARK DATA to get')
-      axios.get('/landmarkdata', {params: {
+      axios.get('api/landmarkdata', {params: {
         // listingLocation: this.state.listingLocation
         listingLat: this.state.listingLat, 
         listingLong: this.state.listingLong
