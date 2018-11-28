@@ -10,7 +10,6 @@ class App extends React.Component {
   }
 
   render (props) {
-    console.log('LISTING IN SERVER JSX', this.state.listing)
     return (
       <div>
         <Neighborhood listing={this.state.listing}/>

@@ -7,7 +7,6 @@ import axios from 'axios';
 export default class Neighborhood extends React.Component {
   constructor(props) {
     super(props);
-    console.log('PROPSSSSSSSS', props)
 
     this.state = {
       dataLoaded: props.listing.dataLoaded || false,
