@@ -27,7 +27,7 @@ export default class Neighborhood extends React.Component {
   componentDidMount() {
     let queryString = window.location.search;
     
-    let splits = queryString.split('?');
+    let splits = queryString.split('=');
     let listingId = parseInt(splits[splits.length -1])
 
     console.log('Listing Id from client query', listingId);
@@ -54,6 +54,7 @@ export default class Neighborhood extends React.Component {
     
     // Get neighborhood data
     .then(() => {
+      console.log('NEIGHB DATA getting')
       let neighbId = this.state.neighborhoodId;
       axios.get('/neighborhooddata', {params: {
         id: neighbId
@@ -73,12 +74,14 @@ export default class Neighborhood extends React.Component {
 
     // Get landmark data for five nearest landmarks to this location
     .then(() => {
+      console.log('LANDMARK DATA to get')
       axios.get('/landmarkdata', {params: {
         // listingLocation: this.state.listingLocation
         listingLat: this.state.listingLat, 
         listingLong: this.state.listingLong
       }})
       .then(({data}) => {
+        console.log('got landmark data')
         this.setState({
           nearbyLandmarks: data,
           dataLoaded: true

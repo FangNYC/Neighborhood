@@ -3,16 +3,19 @@ const { generateDummyArray } = require('./../models/dummyData/generateListingsAr
 const Listing = models.listingSchema;
 const { addListings } = require('./../models/models.js')
 const { deleteListing } = require('./../models/models.js')
+// const { getListingData } = require('./../../database/mongoDB/index.js');
  
 module.exports = {
-  getListingData: (req, res) => { 
+  getListingData: (req, res) => {
+    var begin = Date.now()
     models.getListingData(req.query.id)
     .then((listing) => {
       if (listing.length < 1) {
         res.status(404);
         res.send('Not Found');
       } else {
-        console.log("GET LISTING DATA HIT")
+        var end = Date.now();
+        // console.log(end - begin);
         res.send(listing);
       }
     })
@@ -42,7 +45,14 @@ module.exports = {
     })
   },
 
-  ////////// POST + DELETE METHODS FOR DB TESTING PURPOSES ONLY ////////
+  // getListingDataMongo: (req, res) => {
+  //   var id = req.query.id;
+  //   getListingData(id, (data) => {
+  //     res.send(data);
+  //   })
+  // },
+
+  //////// POST + DELETE METHODS FOR DB TESTING PURPOSES ONLY ////////
   
   postListingData: (req, res) => { 
     console.log('SHOW THE REQUEST?', req)

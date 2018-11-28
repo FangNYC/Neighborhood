@@ -5,7 +5,7 @@
   "main": "bundle.js",
   "scripts": {
     "build": "webpack",
-    "start": "node ./server/server.js",
+    "start": "NODE_ENV=production UV_THREADPOOL_SIZE=48 node ./server/server.js",
     "seed-psql": "node ./server/models/loadDataPSQL.js",
     "seed-mdb": "node ./server/models/loadDataMDB.js",
     "react-dev": "webpack -d --watch",

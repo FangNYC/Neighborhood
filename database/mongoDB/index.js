@@ -33,27 +33,23 @@ var listingsSchema = new mongoose.Schema({
 listingsSchema.plugin(autoinc, {inc_field: 'id', start: 1000000});
 var Listing = mongoose.model('Listing', listingsSchema);
 
-// db.counters.insert({})
-// db.createCollection('counters');
-// db.counters.insert({_id: 'productid', sequence_value: 0});
-
-var landmarksSchema = new mongoose.Schema({
-  id: Number,
-  landmarkName: String,
-  landmarkLat: Number,
-  landmarkLong: Number,
-  distance: Number
-})
-var Landmark = mongoose.model('Landmark', landmarksSchema)
+// var landmarksSchema = new mongoose.Schema({
+//   id: Number,
+//   landmarkName: String,
+//   landmarkLat: Number,
+//   landmarkLong: Number,
+//   distance: Number
+// })
+// var Landmark = mongoose.model('Landmark', landmarksSchema)
 
 ////////// Database Methods //////////
 
-const getListingData = (id) => {
+const getListingData = (id, callback) => {
   Listing.findOne({id: id}, (err, obj) => {
     if (err) {
       console.log('Mongoose fetch error:', err);
     } else {
-      console.log('Successfully fetched listing:', obj)
+      callback(obj);
     }
   })
 }
@@ -61,6 +57,6 @@ const getListingData = (id) => {
 
 module.exports.db = db;
 module.exports.Listing = Listing;
-module.exports.Landmark = Landmark;
+// module.exports.Landmark = Landmark;
 module.exports.getListingData = getListingData;
 
