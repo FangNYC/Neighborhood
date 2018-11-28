@@ -52,6 +52,8 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "faker": "^4.1.0",
+    "fetch": "^1.1.0",
+    "fs": "0.0.1-security",
     "mongodb": "^3.1.9",
     "mongoose": "^5.3.11",
     "mongoose-plugin-autoinc": "^1.1.9",
