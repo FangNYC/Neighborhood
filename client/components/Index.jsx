@@ -2,7 +2,6 @@ import React from 'react';
 import DescriptionSections from './DescriptionSection.jsx';
 import Landmarks from './Landmarks.jsx'
 import Map from './Map.jsx'
-import axios from 'axios';
 
 export default class Neighborhood extends React.Component {
   constructor(props) {

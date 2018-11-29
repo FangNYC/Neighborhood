@@ -1,15 +1,13 @@
 require('newrelic');
 
 const express = require('express');
-const morgan = require('morgan');
+// const morgan = require('morgan');
 const path = require('path');
 const parser = require('body-parser')
 const router = require('./routes/router');
-const React = require('react');
-const ReactDOM = require('react-dom/server');
+const React = require('./../node_modules/react/umd/react.production.min.js');
+const ReactDOM = require('./../node_modules/react-dom/umd/react-dom-server.browser.production.min.js');
 const axios = require('axios');
-const fs = require('fs');
-const fetch = require('fetch');
 const Neighborhood = require('./../public/bundle-server.js').default;
 
 const app = express();
@@ -20,7 +18,7 @@ const db = require('../database/index')
 // const { db } = require('../database/mongoDB/index.js')
 /////////////////////////////////////////////////////////
 
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(parser.json());
 
@@ -35,6 +33,7 @@ app.get( "/listing", ( req, res ) => {
   var props = {};
 
   (async () => {
+    var begin = Date.now();
     await axios.get('http://localhost:3001/api/listingdata', {
       params: {
         id: req.query.id
@@ -68,9 +67,11 @@ app.get( "/listing", ( req, res ) => {
           .then(({data}) => {
             props.dataLoaded = true;
             props.nearbyLandmarks = data
-
+           
             let component = React.createElement(Neighborhood, props);
             let App = ReactDOM.renderToString(component);
+            var end = Date.now();
+            // console.log('TIME TO RENDER WITH API CALLS', end-begin);
             res.send(htmlTemplate(App, props));
           })
         })

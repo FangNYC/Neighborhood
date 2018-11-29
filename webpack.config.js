@@ -52,7 +52,16 @@ const server = {
         }
       },
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({                      // Reduce size of React
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin(),          // Minify everything
+    new webpack.optimize.AggressiveMergingPlugin()  // Merge chunks 
+  ],
 }
 
 module.exports = [client, server];
