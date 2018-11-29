@@ -2,7 +2,6 @@ const router = require('express').Router();
 const controller = require('../controllers/main');
 const path = require('path');
 
-router.get('/', (req, res) => {res.send()});
 router.get('/listingdata', controller.getListingData);
 router.get('/neighborhooddata', controller.getNeighbData);
 router.get('/landmarkdata', controller.getLandmarkData);
@@ -14,9 +13,6 @@ router.get('/landmarkdata', controller.getLandmarkData);
 router.post('/listingdata', controller.postListingData);
 router.delete('/listingdata', controller.deleteListingData)
 
-router.get('/app.js', (req, res) => {
-  res.redirect('public/app.js');
-})
 router.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../public/index.html'));
 })
