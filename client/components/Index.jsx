@@ -3,6 +3,8 @@ import DescriptionSections from './DescriptionSection.jsx';
 import Landmarks from './Landmarks.jsx'
 import Map from './Map.jsx'
 
+console.log(process.env.NODE_ENV)
+
 export default class Neighborhood extends React.Component {
   constructor(props) {
     super(props);

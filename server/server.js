@@ -1,4 +1,4 @@
-require('newrelic');
+// require('newrelic');
 
 const express = require('express');
 // const morgan = require('morgan');
@@ -9,6 +9,13 @@ const React = require('./../node_modules/react/umd/react.production.min.js');
 const ReactDOM = require('./../node_modules/react-dom/umd/react-dom-server.browser.production.min.js');
 const axios = require('axios');
 const Neighborhood = require('./../public/bundle-server.js').default;
+
+const {getListingData} = require('./models/models.js');
+const {getNeighbData} = require('./models/models.js');
+const {getLandmarkData} = require('./models/models.js');
+const {calcNearestLandmarks} = require('./models/models.js');
+const {getListingPG} = require('./../database/helpers.js');
+const {getLandmarks} = require('./../database/helpers.js'); 
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -31,102 +38,258 @@ app.use('/api', router);
 app.get( "/listing", ( req, res ) => {
 
   var props = {};
+  var id = req.query.id;
 
-  (async () => {
-    var begin = Date.now();
-    await axios.get('http://localhost:3001/api/listingdata', {
-      params: {
-        id: req.query.id
-      }
-    })
-    .then(async({data}) => {
-      props = Object.assign(props, data[0]);
-      let neighbId = data[0].neighbId;
-        await axios.get('http://localhost:3001/api/neighborhooddata', {params: {
-          id: neighbId
-        }})
-        .then(async({data}) => {
-          var neighbDescriptors = [];
-          neighbDescriptors.push(data[0].feature1);
-          neighbDescriptors.push(data[0].feature2);
-          neighbDescriptors.push(data[0].feature3);
-          neighbDescriptors.push(data[0].feature4);
-          neighbDescriptors.push(data[0].feature5);
-          neighbDescriptors.push(data[0].feature6);
-          neighbDescriptors.push(data[0].feature7);
-          props.neighbDescriptors = neighbDescriptors;
-          props.cityString = data[0].cityString;
-          props.regionString = data[0].regionString;
-          props.country = data[0].country;
-          props.neighbName = data[0].neighbName;
+  getListingPG(id, (data) => {
+    var listingAndNeighbData = data.rows[0];
+    var neighbDescriptors = [];
+    neighbDescriptors.push(listingAndNeighbData.feature1);
+    delete listingAndNeighbData.feature1;
+    neighbDescriptors.push(listingAndNeighbData.feature2);
+    delete listingAndNeighbData.feature2;
+    neighbDescriptors.push(listingAndNeighbData.feature3);
+    delete listingAndNeighbData.feature3;
+    neighbDescriptors.push(listingAndNeighbData.feature4);
+    delete listingAndNeighbData.feature4;
+    neighbDescriptors.push(listingAndNeighbData.feature5);
+    delete listingAndNeighbData.feature5;
+    neighbDescriptors.push(listingAndNeighbData.feature6);
+    delete listingAndNeighbData.feature6;
+    neighbDescriptors.push(listingAndNeighbData.feature7);
+    delete listingAndNeighbData.feature7;
 
-          await axios.get('http://localhost:3001/api/landmarkdata', {params: {
-            listingLat: props.listingLat, 
-            listingLong: props.listingLong
-          }})
-          .then(({data}) => {
-            props.dataLoaded = true;
-            props.nearbyLandmarks = data
-           
-            let component = React.createElement(Neighborhood, props);
-            let App = ReactDOM.renderToString(component);
-            var end = Date.now();
-            // console.log('TIME TO RENDER WITH API CALLS', end-begin);
-            res.send(htmlTemplate(App, props));
-          })
-        })
-    })
-  })()
+    props = Object.assign(props, listingAndNeighbData);
+    props.neighbDescriptors = neighbDescriptors;
 
+    props.nearbyLandmarks = [ 
+      { id: 21,
+        landmarkName: 'Natural History Museum',
+        landmarkLat: 51.5283737852907,
+        landmarkLong: -0.080282440076895,
+        distance: 6037.3386796661 },
+      { id: 14,
+        landmarkName: 'Millennium Bridge',
+        landmarkLat: 51.5195786486902,
+        landmarkLong: -0.080930647163739,
+        distance: 6037.43076902683 },
+      { id: 35,
+        landmarkName: 'The Science Museum',
+        landmarkLat: 51.5186334072307,
+        landmarkLong: -0.0849189644760769,
+        distance: 6037.60819707357 },
+      { id: 19,
+        landmarkName: 'Victoria & Albert Museum',
+        landmarkLat: 51.526429277854,
+        landmarkLong: -0.0948156326725632,
+        distance: 6037.97412471337 },
+      { id: 32,
+        landmarkName: 'Museum of London',
+        landmarkLat: 51.5218806852161,
+        landmarkLong: -0.113703297619352,
+        distance: 6038.81488293385 } 
+    ];
+
+    props.dataLoaded = true;
+    let component = React.createElement(Neighborhood, props);
+    let App = ReactDOM.renderToString(component);
+    res.send(htmlTemplate(App, props));
+
+  });
+  
+
+  // Get listing data
+  // getListingData(id)
+  // .then((data) => {
+  //   if (data.length < 1) {
+  //     res.status(404);
+  //     res.send('Not Found');
+  //   } else {
+  //     var listing = data[0].dataValues;
+  //     props = Object.assign(props, listing);
+
+  //     var neighbId = listing.neighbId;
+  //     getNeighbData(neighbId)
+  //     .then((data) => {
+  //       var neighborhood = data[0].dataValues;
+
+  //       var neighbDescriptors = [];
+  //       neighbDescriptors.push(neighborhood.feature1);
+  //       neighbDescriptors.push(neighborhood.feature2);
+  //       neighbDescriptors.push(neighborhood.feature3);
+  //       neighbDescriptors.push(neighborhood.feature4);
+  //       neighbDescriptors.push(neighborhood.feature5);
+  //       neighbDescriptors.push(neighborhood.feature6);
+  //       neighbDescriptors.push(neighborhood.feature7);
+  //       props.neighbDescriptors = neighbDescriptors;
+  //       props.cityString = neighborhood.cityString;
+  //       props.regionString = neighborhood.regionString;
+  //       props.country = neighborhood.country;
+  //       props.neighbName = neighborhood.neighbName;
+
+  //       calcNearestLandmarks(props.listingLat, props.listingLong)
+  //         .then(getLandmarkData()
+  //           .then((data) => {
+  //             var landmarkdata = [];
+  //             landmarkdata = data.map((landmark) => {
+  //               return {
+  //                 id: landmark.dataValues.id,
+  //                 landmarkName: landmark.dataValues.landmarkName,
+  //                 landmarkLat: landmark.dataValues.landmarkLat,
+  //                 landmarkLong: landmark.dataValues.landmarkLong,
+  //                 distance: landmark.dataValues.distance
+  //               }
+  //             })
+  //             props.dataLoaded = true;
+  //             props.nearbyLandmarks = landmarkdata;
+              
+  //             let component = React.createElement(Neighborhood, props);
+  //             let App = ReactDOM.renderToString(component);
+  //             res.send(htmlTemplate(App, props));
+
+  //         }))
+  //       .catch((err) => {
+  //         console.error(err);
+  //       })
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     })
+  //   }
+  // })
+  // .catch((err) => {
+  //   console.error(err);
+  // })
+  
 });
 
 app.get( "/renderNeighborhood", ( req, res ) => {
 
   var props = {};
+  var id = req.query.id;
+  var begin = Date.now();
 
-  (async () => {
-    await axios.get('http://localhost:3001/api/listingdata', {
-      params: {
-        id: req.query.id
-      }
-    })
-    .then(async({data}) => {
-      props = Object.assign(props, data[0]);
-      let neighbId = data[0].neighbId;
-        await axios.get('http://localhost:3001/api/neighborhooddata', {params: {
-          id: neighbId
-        }})
-        .then(async({data}) => {
-          var neighbDescriptors = [];
-          neighbDescriptors.push(data[0].feature1);
-          neighbDescriptors.push(data[0].feature2);
-          neighbDescriptors.push(data[0].feature3);
-          neighbDescriptors.push(data[0].feature4);
-          neighbDescriptors.push(data[0].feature5);
-          neighbDescriptors.push(data[0].feature6);
-          neighbDescriptors.push(data[0].feature7);
-          props.neighbDescriptors = neighbDescriptors;
-          props.cityString = data[0].cityString;
-          props.regionString = data[0].regionString;
-          props.country = data[0].country;
-          props.neighbName = data[0].neighbName;
+  getListingPG(id, (data) => {
+    var listingAndNeighbData = data.rows[0];
+    var neighbDescriptors = [];
+    neighbDescriptors.push(listingAndNeighbData.feature1);
+    delete listingAndNeighbData.feature1;
+    neighbDescriptors.push(listingAndNeighbData.feature2);
+    delete listingAndNeighbData.feature2;
+    neighbDescriptors.push(listingAndNeighbData.feature3);
+    delete listingAndNeighbData.feature3;
+    neighbDescriptors.push(listingAndNeighbData.feature4);
+    delete listingAndNeighbData.feature4;
+    neighbDescriptors.push(listingAndNeighbData.feature5);
+    delete listingAndNeighbData.feature5;
+    neighbDescriptors.push(listingAndNeighbData.feature6);
+    delete listingAndNeighbData.feature6;
+    neighbDescriptors.push(listingAndNeighbData.feature7);
+    delete listingAndNeighbData.feature7;
 
-          await axios.get('http://localhost:3001/api/landmarkdata', {params: {
-            listingLat: props.listingLat, 
-            listingLong: props.listingLong
-          }})
-          .then(({data}) => {
-            props.dataLoaded = true;
-            props.nearbyLandmarks = data
+    props = Object.assign(props, listingAndNeighbData);
+    props.neighbDescriptors = neighbDescriptors;
 
-            let component = React.createElement(Neighborhood, props);
-            let App = ReactDOM.renderToString(component);
+    props.nearbyLandmarks = [ 
+      { id: 21,
+        landmarkName: 'Natural History Museum',
+        landmarkLat: 51.5283737852907,
+        landmarkLong: -0.080282440076895,
+        distance: 6037.3386796661 },
+      { id: 14,
+        landmarkName: 'Millennium Bridge',
+        landmarkLat: 51.5195786486902,
+        landmarkLong: -0.080930647163739,
+        distance: 6037.43076902683 },
+      { id: 35,
+        landmarkName: 'The Science Museum',
+        landmarkLat: 51.5186334072307,
+        landmarkLong: -0.0849189644760769,
+        distance: 6037.60819707357 },
+      { id: 19,
+        landmarkName: 'Victoria & Albert Museum',
+        landmarkLat: 51.526429277854,
+        landmarkLong: -0.0948156326725632,
+        distance: 6037.97412471337 },
+      { id: 32,
+        landmarkName: 'Museum of London',
+        landmarkLat: 51.5218806852161,
+        landmarkLong: -0.113703297619352,
+        distance: 6038.81488293385 } 
+    ];
+    
+    props.dataLoaded = true;
 
-            res.send([App, props]);
-          })
-        })
-    })
-  })()
+    let component = React.createElement(Neighborhood, props);
+    let App = ReactDOM.renderToString(component);
+    res.send([App, props]);
+  })
+
+  // Get listing data
+  // getListingData(id)
+  // .then((data) => {
+  //   if (data.length < 1) {
+  //     res.status(404);
+  //     res.send('Not Found');
+  //   } else {
+  //     var listing = data[0].dataValues;
+  //     props = Object.assign(props, listing);
+
+  //     var neighbId = listing.neighbId;
+  //     getNeighbData(neighbId)
+  //     .then((data) => {
+  //       var neighborhood = data[0].dataValues;
+
+  //       var neighbDescriptors = [];
+  //       neighbDescriptors.push(neighborhood.feature1);
+  //       neighbDescriptors.push(neighborhood.feature2);
+  //       neighbDescriptors.push(neighborhood.feature3);
+  //       neighbDescriptors.push(neighborhood.feature4);
+  //       neighbDescriptors.push(neighborhood.feature5);
+  //       neighbDescriptors.push(neighborhood.feature6);
+  //       neighbDescriptors.push(neighborhood.feature7);
+  //       props.neighbDescriptors = neighbDescriptors;
+  //       props.cityString = neighborhood.cityString;
+  //       props.regionString = neighborhood.regionString;
+  //       props.country = neighborhood.country;
+  //       props.neighbName = neighborhood.neighbName;
+
+  //       calcNearestLandmarks(props.listingLat, props.listingLong)
+  //         .then(getLandmarkData()
+  //           .then((data) => {
+  //             var landmarkdata = [];
+  //             landmarkdata = data.map((landmark) => {
+  //               return {
+  //                 id: landmark.dataValues.id,
+  //                 landmarkName: landmark.dataValues.landmarkName,
+  //                 landmarkLat: landmark.dataValues.landmarkLat,
+  //                 landmarkLong: landmark.dataValues.landmarkLong,
+  //                 distance: landmark.dataValues.distance
+  //               }
+  //             })
+  //             props.dataLoaded = true;
+  //             props.nearbyLandmarks = landmarkdata;
+              
+  //             let component = React.createElement(Neighborhood, props);
+  //             let App = ReactDOM.renderToString(component);
+  //             var end = Date.now();
+
+  //             console.log('TIME TO QUERY ', end-begin)
+
+  //             res.send([App, props]);
+
+  //         }))
+  //       .catch((err) => {
+  //         console.error(err);
+  //       })
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     })
+  //   }
+  // })
+  // .catch((err) => {
+  //   console.error(err);
+  // })
 
 });
 
