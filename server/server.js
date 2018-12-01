@@ -10,10 +10,10 @@ const ReactDOM = require('./../node_modules/react-dom/umd/react-dom-server.brows
 const axios = require('axios');
 const Neighborhood = require('./../public/bundle-server.js').default;
 
-const {getListingData} = require('./models/models.js');
-const {getNeighbData} = require('./models/models.js');
-const {getLandmarkData} = require('./models/models.js');
-const {calcNearestLandmarks} = require('./models/models.js');
+// const {getListingData} = require('./models/models.js');
+// const {getNeighbData} = require('./models/models.js');
+// const {getLandmarkData} = require('./models/models.js');
+// const {calcNearestLandmarks} = require('./models/models.js');
 const {getListingPG} = require('./../database/helpers.js');
 const {getLandmarks} = require('./../database/helpers.js'); 
 
@@ -34,6 +34,10 @@ app.use('/api', router);
 // app.get('/*', (req, res) => {
 //   res.sendFile(path.join(__dirname, '../public/index.html'));
 // })
+
+app.get('/test', (req, res) => {
+  res.send('test');
+})
 
 app.get( "/listing", ( req, res ) => {
 
