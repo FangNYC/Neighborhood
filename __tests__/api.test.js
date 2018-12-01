@@ -3,9 +3,9 @@ const request = require('supertest');
 const { getListingData } = require('./../server/models/models.js');
 const { generateDummyArray } = require('./../server/models/dummyData/generateListingsArray');
 const faker = require('faker');
-const mongoose = require('mongoose');
-const { Listing } = require('./../database/mongoDB/index.js');
-const MongoClient = require('mongodb').MongoClient;
+// const mongoose = require('mongoose');
+// const { Listing } = require('./../database/mongoDB/index.js');
+// const MongoClient = require('mongodb').MongoClient;
 
 //============================================================
 //                        API UNIT TESTS 
@@ -258,153 +258,153 @@ describe('Test Postgres + Sequelize READ / WRITE', () => {
 //                MONGODB UNIT TESTS 
 //=================================================
 
-const testListing = new Listing({
-  "id": 11000000,
-  "hostFirstName": faker.name.firstName(),
-  "city": 'London',
-  "region": 'England',
-  "country": 'United Kingdom',
-  "neighb": 1,
-  "listingLat": Number((Math.random() * 100).toFixed(6)),
-  "listingLong": Number((Math.random() * 100).toFixed(6)),
-  "neighbDesc": faker.lorem.paragraph(),
-  "gettingAroundDesc": faker.lorem.paragraph(),
-  "feature1": faker.lorem.words(),
-  "feature2": faker.lorem.words(),
-  "feature3": faker.lorem.words(),
-  "feature4": faker.lorem.words(),
-  "feature5": faker.lorem.words(),
-  "feature6": faker.lorem.words(),
-  "feature7": faker.lorem.words()
-})
+// const testListing = new Listing({
+//   "id": 11000000,
+//   "hostFirstName": faker.name.firstName(),
+//   "city": 'London',
+//   "region": 'England',
+//   "country": 'United Kingdom',
+//   "neighb": 1,
+//   "listingLat": Number((Math.random() * 100).toFixed(6)),
+//   "listingLong": Number((Math.random() * 100).toFixed(6)),
+//   "neighbDesc": faker.lorem.paragraph(),
+//   "gettingAroundDesc": faker.lorem.paragraph(),
+//   "feature1": faker.lorem.words(),
+//   "feature2": faker.lorem.words(),
+//   "feature3": faker.lorem.words(),
+//   "feature4": faker.lorem.words(),
+//   "feature5": faker.lorem.words(),
+//   "feature6": faker.lorem.words(),
+//   "feature7": faker.lorem.words()
+// })
 
-// At present, setting up mongo connection without Before All. 
-// TODO: figure out how to access before all scope in subsequent tests.
+// // At present, setting up mongo connection without Before All. 
+// // TODO: figure out how to access before all scope in subsequent tests.
 
-const url = 'mongodb://localhost/neighborhood';
-const dbName = 'neighborhood';
-const client = new MongoClient(url);
-const connection = client.connect() 
+// const url = 'mongodb://localhost/neighborhood';
+// const dbName = 'neighborhood';
+// const client = new MongoClient(url);
+// const connection = client.connect() 
 
-describe('Test raw MongoDB READ / WRITE', () => {
+// describe('Test raw MongoDB READ / WRITE', () => {
 
-  test('It should insert one new listing directly to MongoDB', (done) => {
-    const connect = connection;
-    connect.then(() => {
+//   test('It should insert one new listing directly to MongoDB', (done) => {
+//     const connect = connection;
+//     connect.then(() => {
 
-      const db = client.db(dbName);
-      const collection = db.collection('listings');
-      collection.insertOne(testListing, (err, result) => {
-        if(err) {
-          console.log(err)
-        } else {
-          // console.log("Documented added to MongoDB:", result.ops[0])
-          expect(result.result.n).toBe(1);
-          done();
-        }
-      })
-    })
-  })
+//       const db = client.db(dbName);
+//       const collection = db.collection('listings');
+//       collection.insertOne(testListing, (err, result) => {
+//         if(err) {
+//           console.log(err)
+//         } else {
+//           // console.log("Documented added to MongoDB:", result.ops[0])
+//           expect(result.result.n).toBe(1);
+//           done();
+//         }
+//       })
+//     })
+//   })
 
-  test('It should read 1 listing with id 100', (done) => {
-    const connect = connection;
-    connect.then(() => {
+//   test('It should read 1 listing with id 100', (done) => {
+//     const connect = connection;
+//     connect.then(() => {
 
-      const db = client.db(dbName)
-      const collection = db.collection('listings')
-      collection.findOne({id: 100}, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          // console.log('RESULT FROM MONGODB QUERY:', result);
-          expect(result.id).toBe(100);
-          done();
-        }
-      })
+//       const db = client.db(dbName)
+//       const collection = db.collection('listings')
+//       collection.findOne({id: 100}, (err, result) => {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           // console.log('RESULT FROM MONGODB QUERY:', result);
+//           expect(result.id).toBe(100);
+//           done();
+//         }
+//       })
 
-    })
-  })
-
-
-  test('It should read 1 listing with id 100,000', (done) => {
-    const connect = connection;
-    connect.then(() => {
-
-      const db = client.db(dbName)
-      const collection = db.collection('listings')
-      collection.findOne({id: 100000}, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          // console.log('RESULT FROM MONGODB QUERY:', result);
-          expect(result.id).toBe(100000);
-          done();
-        }
-      })
-
-    })
-  })
-
-  test('It should read 1 listing with id 500,000', (done) => {
-    const connect = connection;
-    connect.then(() => {
-
-      const db = client.db(dbName)
-      const collection = db.collection('listings')
-      collection.findOne({id: 500000}, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          // console.log('RESULT FROM MONGODB QUERY:', result);
-          expect(result.id).toBe(500000);
-          done();
-        }
-      })
-
-    })
-  })
-
-   test('It should read 1 listing with id 1,000,000', (done) => {
-    const connect = connection;
-    connect.then(() => {
-
-      const db = client.db(dbName)
-      const collection = db.collection('listings')
-      collection.findOne({id: 1000000}, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          // console.log('RESULT FROM MONGODB QUERY:', result);
-          expect(result.id).toBe(1000000);
-          done();
-        }
-      })
-
-    })
-  })
-
-  test('It should read 1 listing with id 9,000,000', (done) => {
-    const connect = connection;
-    connect.then(() => {
-
-      const db = client.db(dbName)
-      const collection = db.collection('listings')
-      collection.findOne({id: 9000000}, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          // console.log('RESULT FROM MONGODB QUERY:', result);
-          expect(result.id).toBe(9000000);
-          done();
-        }
-      })
-
-    })
-  })
+//     })
+//   })
 
 
-  afterAll(() => {
-    connection.close();
-  })
+//   test('It should read 1 listing with id 100,000', (done) => {
+//     const connect = connection;
+//     connect.then(() => {
 
-})
+//       const db = client.db(dbName)
+//       const collection = db.collection('listings')
+//       collection.findOne({id: 100000}, (err, result) => {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           // console.log('RESULT FROM MONGODB QUERY:', result);
+//           expect(result.id).toBe(100000);
+//           done();
+//         }
+//       })
+
+//     })
+//   })
+
+//   test('It should read 1 listing with id 500,000', (done) => {
+//     const connect = connection;
+//     connect.then(() => {
+
+//       const db = client.db(dbName)
+//       const collection = db.collection('listings')
+//       collection.findOne({id: 500000}, (err, result) => {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           // console.log('RESULT FROM MONGODB QUERY:', result);
+//           expect(result.id).toBe(500000);
+//           done();
+//         }
+//       })
+
+//     })
+//   })
+
+//    test('It should read 1 listing with id 1,000,000', (done) => {
+//     const connect = connection;
+//     connect.then(() => {
+
+//       const db = client.db(dbName)
+//       const collection = db.collection('listings')
+//       collection.findOne({id: 1000000}, (err, result) => {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           // console.log('RESULT FROM MONGODB QUERY:', result);
+//           expect(result.id).toBe(1000000);
+//           done();
+//         }
+//       })
+
+//     })
+//   })
+
+//   test('It should read 1 listing with id 9,000,000', (done) => {
+//     const connect = connection;
+//     connect.then(() => {
+
+//       const db = client.db(dbName)
+//       const collection = db.collection('listings')
+//       collection.findOne({id: 9000000}, (err, result) => {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           // console.log('RESULT FROM MONGODB QUERY:', result);
+//           expect(result.id).toBe(9000000);
+//           done();
+//         }
+//       })
+
+//     })
+//   })
+
+
+//   afterAll(() => {
+//     connection.close();
+//   })
+
+// })

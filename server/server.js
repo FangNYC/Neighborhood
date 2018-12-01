@@ -96,70 +96,6 @@ app.get( "/listing", ( req, res ) => {
 
   });
   
-
-  // Get listing data
-  // getListingData(id)
-  // .then((data) => {
-  //   if (data.length < 1) {
-  //     res.status(404);
-  //     res.send('Not Found');
-  //   } else {
-  //     var listing = data[0].dataValues;
-  //     props = Object.assign(props, listing);
-
-  //     var neighbId = listing.neighbId;
-  //     getNeighbData(neighbId)
-  //     .then((data) => {
-  //       var neighborhood = data[0].dataValues;
-
-  //       var neighbDescriptors = [];
-  //       neighbDescriptors.push(neighborhood.feature1);
-  //       neighbDescriptors.push(neighborhood.feature2);
-  //       neighbDescriptors.push(neighborhood.feature3);
-  //       neighbDescriptors.push(neighborhood.feature4);
-  //       neighbDescriptors.push(neighborhood.feature5);
-  //       neighbDescriptors.push(neighborhood.feature6);
-  //       neighbDescriptors.push(neighborhood.feature7);
-  //       props.neighbDescriptors = neighbDescriptors;
-  //       props.cityString = neighborhood.cityString;
-  //       props.regionString = neighborhood.regionString;
-  //       props.country = neighborhood.country;
-  //       props.neighbName = neighborhood.neighbName;
-
-  //       calcNearestLandmarks(props.listingLat, props.listingLong)
-  //         .then(getLandmarkData()
-  //           .then((data) => {
-  //             var landmarkdata = [];
-  //             landmarkdata = data.map((landmark) => {
-  //               return {
-  //                 id: landmark.dataValues.id,
-  //                 landmarkName: landmark.dataValues.landmarkName,
-  //                 landmarkLat: landmark.dataValues.landmarkLat,
-  //                 landmarkLong: landmark.dataValues.landmarkLong,
-  //                 distance: landmark.dataValues.distance
-  //               }
-  //             })
-  //             props.dataLoaded = true;
-  //             props.nearbyLandmarks = landmarkdata;
-              
-  //             let component = React.createElement(Neighborhood, props);
-  //             let App = ReactDOM.renderToString(component);
-  //             res.send(htmlTemplate(App, props));
-
-  //         }))
-  //       .catch((err) => {
-  //         console.error(err);
-  //       })
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     })
-  //   }
-  // })
-  // .catch((err) => {
-  //   console.error(err);
-  // })
-  
 });
 
 app.get( "/renderNeighborhood", ( req, res ) => {
@@ -293,7 +229,7 @@ app.get( "/renderNeighborhood", ( req, res ) => {
 
 });
 
-// app.disable('e-tag').disable('x-powered-by')
+app.disable('e-tag').disable('x-powered-by')
 
 app.listen(port, () => {
   console.log(`server running at: http://localhost:${port}`);
