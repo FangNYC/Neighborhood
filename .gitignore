@@ -4,6 +4,7 @@
 ## API Key ##
 config.js
 newrelic.js
+loader-config.js
 
 ## NPM ##
 npm

@@ -1,4 +1,4 @@
-require('newrelic');
+// require('newrelic');
 
 const express = require('express');
 // const morgan = require('morgan');
@@ -7,8 +7,8 @@ const parser = require('body-parser')
 const router = require('./routes/router');
 const React = require('./../node_modules/react/umd/react.production.min.js');
 const ReactDOM = require('./../node_modules/react-dom/umd/react-dom-server.browser.production.min.js');
-const axios = require('axios');
 const Neighborhood = require('./../public/bundle-server.js').default;
+const LOADER_CONFIG_KEY = process.env.loaderConfigKey || require('./../loader-config.js');
 
 // const {getListingData} = require('./models/models.js');
 // const {getNeighbData} = require('./models/models.js');
@@ -37,6 +37,11 @@ app.use('/api', router);
 
 app.get('/test', (req, res) => {
   res.send('test');
+})
+
+app.get(`/${LOADER_CONFIG_KEY}`, (req, res) => {
+  var key = LOADER_CONFIG_KEY;
+  res.send(key)
 })
 
 app.get( "/listing", ( req, res ) => {

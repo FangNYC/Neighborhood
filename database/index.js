@@ -13,7 +13,7 @@ const db = new Sequelize('neighborhood', 'postgres', 'hrnyc18',
       idle: 10000
     },
     logging: false,
-    host: '18.191.18.159',
+    host: '3.16.43.119',
     post: 5432
   } 
 )
