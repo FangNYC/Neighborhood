@@ -14,7 +14,7 @@ const db = new Sequelize('neighborhood', 'postgres', 'hrnyc18',
     },
     logging: false,
     host: '3.16.43.119',
-    post: 5432
+    port: 5432
   } 
 )
 

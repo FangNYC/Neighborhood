@@ -1,5 +1,5 @@
 # Neighborhood
-This module displays information about the neighborhood of a specific Staybnb listing. 
+For this project, I was responsible for scaling the backend of an existing airbnb clone built by another developer. 
 
 ## Related Projects
 

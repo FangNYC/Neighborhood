@@ -1,6 +1,5 @@
 const async = require('async');
 const models = require('./models.js');
-const { fork } = require('child_process');
 const { generateDummyArray } = require('./dummyData/generateListingsArray');
 const generatedLandmarks = require('./dummyData/generateLandmarksData.js');
 const neighbs = require('./dummyData/neighbsData.js').neighbsArray;

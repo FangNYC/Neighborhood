@@ -68,6 +68,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-google-maps": "^9.4.5",
+    "redis": "^2.8.0",
     "sequelize": "^4.41.2"
   },
   "jest": {
