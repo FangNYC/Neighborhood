@@ -10,14 +10,6 @@ This module displays information about the neighborhood of a rental listing. For
   - https://github.com/Staybnb/Booking
   - https://github.com/Staybnb/Reviews
 
-
-## Table of Contents
-
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-
-
 ## Development
 To run the application in non-development mode from within the root directory: 
 ```sh
