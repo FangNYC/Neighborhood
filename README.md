@@ -1,6 +1,8 @@
 # Neighborhood
 For this project, I was responsible for scaling the backend of an existing airbnb clone built by another developer. 
 
+<img src="https://github.com/Staybnb/Neighborhood/blob/master/Demo_Neighborhood_Staybnb_compressed.gif" width="65%" height="65%">
+
 ## Related Projects
 
   - https://github.com/Staybnb/Nav
