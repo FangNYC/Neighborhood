@@ -1,5 +1,5 @@
 # Neighborhood
-For this project, I was responsible for scaling the backend of an existing airbnb clone built by another developer. 
+This module displays information about the neighborhood of a rental listing. For this project, I was responsible for vertically and horizontally scaling the service to handle up to 1000 RPS with an average latency of under 500ms.
 
 <img src="https://github.com/Staybnb/Neighborhood/blob/master/Demo_Neighborhood_Staybnb_compressed.gif" width="65%" height="65%">
 
@@ -17,11 +17,6 @@ For this project, I was responsible for scaling the backend of an existing airbn
 1. [Requirements](#requirements)
 1. [Development](#development)
 
-## Usage
-
-> Some usage instructions
-
-## Requirements
 
 ## Development
 To run the application in non-development mode from within the root directory: 
@@ -44,7 +39,6 @@ npm test
 From within the root directory:
 
 ```sh
-npm install -g webpack
 npm install
 ```
 
