@@ -16,7 +16,8 @@
     "start-pm2": "pm2 start ./server/server.js",
     "list-pm2": "pm2 list",
     "show-server-pm2": "pm2 show server",
-    "stop-pm2": "pm2 stop 0"
+    "stop-pm2": "pm2 stop 0",
+    "install:reset": "rm -rf node_modules"
   },
   "repository": {
     "type": "git",
