@@ -33,11 +33,7 @@ client.on('connect', function() {
 
 // ================================================================
 
-//////////////////////// UNCOMMENT DB TO USE //////////////////////
 const db = require('../database/index')
-// const { db } = require('../database/mongoDB/index.js')
-///////////////////////////////////////////////////////////////////
-
 const app = express();
 const port = process.env.PORT || 3001;
 
